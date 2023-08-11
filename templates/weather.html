@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/weather.js') }}"></script>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script type="text/javascript">
+      
+      function toggleTemperatureUnits() {
+        var tempC = document.querySelector("#temperature-celsius");
+        var tempF = document.querySelector("#temperature-fahrenheit");
+        var feelsLikeC = document.querySelector("#feels-like-celsius");
+        var feelsLikeF = document.querySelector("#feels-like-fahrenheit");
+        var tempUnits = document.querySelector("#temperature-units");
+
+        if (tempUnits.textContent === "C") {
+          tempC.style.display = "none";
+          tempF.style.display = "inline-block";
+          feelsLikeC.style.display = "none";
+          feelsLikeF.style.display = "inline-block";
+          tempUnits.textContent = "F";
+          document.querySelector("#temperature-toggle").textContent = "°F";
+        } else {
+          tempC.style.display = "inline-block";
+          tempF.style.display = "none";
+          feelsLikeC.style.display = "inline-block";
+          feelsLikeF.style.display = "none";
+          tempUnits.textContent = "C";
+          document.querySelector("#temperature-toggle").textContent = "°C";
+        }
+      }
+  function saveCity() {
+    var city = document.querySelector("#city").textContent;
+    var savedCities = localStorage.getItem("savedCities");
+    savedCities = savedCities ? JSON.parse(savedCities) : [];
+    if (!savedCities.includes(city)) {
+      savedCities.push(city);
+      localStorage.setItem("savedCities", JSON.stringify(savedCities));
+      var sidebar = document.querySelector("#sidebar");
+      var cityLink = document.createElement("a");
+      cityLink.href = "/?city=" + encodeURIComponent(city.toLowerCase());
+      cityLink.textContent = city;
+      sidebar.appendChild(cityLink);
+    }
+  }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        var editableDiv = document.getElementById("editable-div");
+
+        editableDiv.addEventListener("input", function() {
+          var text = editableDiv.innerText;
+          console.log(text);
+        });
+      });
+      document.addEventListener("DOMContentLoaded", function() {
+  loadSavedCities();
+});
+
+      const editableDiv = document.getElementById('editable-div');
+
+      editableDiv.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+        }
+      });
+
+      feather.replace();
+      
+      function saveCity() {
+        var city = document.querySelector("#city").textContent;
+        var savedCities = localStorage.getItem("savedCities");
+        savedCities = savedCities ? JSON.parse(savedCities) : [];
+        if (!savedCities.includes(city)) {
+          savedCities.push(city);
+          localStorage.setItem("savedCities", JSON.stringify(savedCities));
+          var sidebar = document.querySelector("#sidebar");
+          var cityLink = document.createElement("a");
+          cityLink.href = "/?city=" + encodeURIComponent(city.toLowerCase());
+          cityLink.textContent = city;
+          sidebar.appendChild(cityLink);
+        }
+      }
+      
+      function addCity() {
+  var city = prompt("Enter a city name:");
+  if (city != null && city != "") {
+    city = city.toLowerCase().replace(/\b\w/g, function(l){ return l.toUpperCase(); });
+    var savedCities = localStorage.getItem("savedCities");
+    savedCities = savedCities ? JSON.parse(savedCities) : [];
+    if (!savedCities.includes(city)) {
+      savedCities.push(city);
+      localStorage.setItem("savedCities", JSON.stringify(savedCities));
+      var sidebar = document.querySelector("#sidebar");
+      var cityLink = document.createElement("a");
+      cityLink.href = "/?city=" + encodeURIComponent(city.toLowerCase());
+      cityLink.textContent = city;
+      sidebar.appendChild(cityLink);
+    }
+  }
+}   
+      document.addEventListener("DOMContentLoaded", function() {
+        loadSavedCities();
+      });
+    </script>
+  </head>
+  <body>
+    
+  <div class="top-bar">
+  <div class="weather-value">
+    <img src="http://openweathermap.org/img/wn/{{ weather.icon }}.png" alt="{{ weather.description }}" width="50px">
+  </div>
+  <div id="sidebar">
+    <!-- saved cities will be added here -->
+  </div>
+  <form action="/" method="get">
+    <input type="text" name="city" value="{{ city }}" hidden>
+    <button type="submit" hidden>Search</button>
+  </form>
+  <div style="width: auto; display: flex; align-items: center;">
+    <h1 contenteditable="true" onblur="location.href='/?city=' + this.innerText.toLowerCase().replace(/\b\w/g, function(l){ return l.toUpperCase(); })" style="width: 100%;">{{ city }}</h1>
+  </div>      
+  <button id="temperature-toggle" onclick="toggleTemperatureUnits()"> °C</button>
+  <span id="temperature-units"></span> 
+  <button id="add-city-btn" onclick="addCity()">Add City</button>
+</div>
+
+<div style="width: auto; display: flex; align-items: center;">
+  <h1 contenteditable="true" onblur="location.href='/?city=' + this.innerText.toLowerCase().replace(/\b\w/g, function(l){ return l.toUpperCase(); })" style="width: 100%;">{{ city }}</h1>
+</div>      
+        <button id="temperature-toggle" onclick="toggleTemperatureUnits()"> °C</button>
+        <span id="temperature-units"></span> 
+      </div>
+      <div class="weather-info">
+        
+        <div class="weather-item">
+          <div class="weather-label">Temperature:</div>
+          <div class="weather-value-container">
+            <span id="temperature-celsius" class="weather-value">{{ weather.temperature_celsius }}°C</span>
+            <span id="temperature-fahrenheit" class="weather-value" style="display:none">{{ weather.temperature_fahrenheit }}°F</span>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-label">Feels Like:</div>
+          <div class="weather-value-container">
+            <span id="feels-like-celsius" class="weather-value">{{ weather.feels_like_celsius }}°C</span>
+            <span id="feels-like-fahrenheit" class="weather-value" style="display:none">{{ weather.feels_like_fahrenheit }}°F</span>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-label">Humidity:</div>
+          <div class="weather-value">{{ weather.humidity }}%</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-label">Description:</div>
+          <div class="weather-value">{{ weather.description }}</div>
+        </div>
+
+        <div class="weather-item">
+          <div class="weather-label">Pressure:</div>
+          <div class="weather-value">{{ weather.pressure }} hPa</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-label">Wind Speed:</div>
+          <div class="weather-value">{{ weather.wind_speed }} m/s</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-label">Cloudiness:</div>
+          <div class="weather-value">{{ weather.cloudiness }} %</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-label">Sunset:</div> <!--Need to convert to normal time, based on the city's timezone-->
+          <div class="weather-value">{{ weather.sunset }} %</div>
+        </div>
+        <div class="weather-item"> 
+          <div class="weather-label">Sunrise:</div> <!--Need to convert to normal time, based on the city's timezone-->
+          <div class="weather-value">{{ weather.sunrise }}</div>
+        </div>
+          </div>
+          </div>
+          
+            </body>
+          </html>
