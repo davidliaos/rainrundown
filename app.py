@@ -16,7 +16,7 @@ app = Flask(__name__)
 def get_weather(city):
 
     # API Key for OpenWeatherMap API
-    API_KEY = "b355e10480f841d6edc5e034e570db3f"
+    API_KEY = ""
 
     # API endpoint for current weather data
     # Using set endpoint to save space, calculation is easier than just calling get_weather twice for each unit
