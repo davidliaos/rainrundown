@@ -16,7 +16,7 @@ app = Flask(__name__)
 def get_weather(city):
 
     # API Key for OpenWeatherMap API
-    API_KEY = ""
+    API_KEY = "12379bc0732db02869709dfd89ef6db2"
 
     # API endpoint for current weather data
     # Using set endpoint to save space, calculation is easier than just calling get_weather twice for each unit
@@ -29,20 +29,22 @@ def get_weather(city):
     if response.status_code == 200:
         # Parse API response as JSON data
         weather_data = response.json()
+        
 
         # Check if sys key exists in weather_data dictionary
         if 'sys' in weather_data:
             sunrise_local_time = datetime.datetime.fromtimestamp(
                 weather_data["sys"]["sunrise"]
-            ).strftime("%H:%M:%S")
+            ).strftime("%I:%M %p")
             sunset_local_time = datetime.datetime.fromtimestamp(
                 weather_data["sys"]["sunset"]
-            ).strftime("%H:%M:%S")
+            ).strftime("%I:%M %p")
 
             # Get required weather information from API response
             weather = {
                 "city": weather_data["name"],
                 "country": weather_data["sys"]["country"],
+                "country_code": weather_data["sys"]["country"],
                 "temperature_celsius": weather_data["main"]["temp"],
                 "temperature_fahrenheit": round(
                     (weather_data["main"]["temp"] * 9 / 5) + 32, 2
@@ -95,10 +97,23 @@ def get_random_weather():
     weather_info = get_weather(city_name).json.get("weather")
 
     # Load the weather template with the weather information
-    return render_template("weather.html", city=city_name, weather=weather_info)
+    return render_template("weather.html", city=city_name, weather=weather_info, country_code=weather_info["country"])
 
 
 # Route to HTML template to display weather information
 @app.route("/weather")
 def weather():
     return render_template("weather.html")
+
+@app.route("/cities")
+def cities():
+    total_cities = len(city_data)
+    current_count = request.args.get("count", default=5, type=int)
+    return render_template("city.html", cities=city_data, current_count=current_count, total_cities=total_cities)
+
+# Run the server
+if __name__ == "__main__":
+    app.run()
+
+
+

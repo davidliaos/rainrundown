@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>City List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Available Cities</h1>
+    <div class="city-grid">
+      {% for city in cities[:current_count] %}
+        <div class="city-item">
+          <a href="/?city={{ city.name }}" class="city-link">{{ city.name }}, {{ city.country }}</a>
+        </div>
+      {% endfor %}
+    </div>
+    {% if current_count < total_cities %}
+      <button id="showMoreBtn" onclick="showMoreCities()">Show More</button>
+    {% endif %}
+  </div>
+
+  <script>
+    let currentCount = {{ current_count }};
+    const increment = 5;
+
+    function showMoreCities() {
+      currentCount += increment;
+      location.href = '/cities?count=' + currentCount;
+    }
+  </script>
+
+  <style>
+    .city-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .city-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s ease-in-out;
+      text-align: center;
+    }
+
+    .city-item:hover {
+      transform: scale(1.05);
+    }
+
+    .city-link {
+      text-decoration: none;
+      color: #0077be;
+      font-weight: bold;
+    }
+
+    .city-link:hover {
+      text-decoration: underline;
+    }
+
+    #showMoreBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    #showMoreBtn:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</body>
+</html>
