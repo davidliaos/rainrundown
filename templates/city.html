@@ -2,9 +2,15 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>City List</title>
+  <title>Available Cities</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
+<div class="navbar">
+    <a href="/cities" class="nav-item">🏙️</a>
+    <a href="/home" class="nav-item">🔍</a>
+    <a href="/weather/random" class="nav-item">❓</a>
+  </div>
 
 <body>
   <div class="container">
@@ -12,7 +18,8 @@
     <div class="city-grid">
       {% for city in cities[:current_count] %}
         <div class="city-item">
-          <a href="/?city={{ city.name }}" class="city-link">{{ city.name }}, {{ city.country }}</a>
+          <img src="https://flagsapi.com/{{ city.country }}/flat/48.png" alt="Country Flag">
+          <a href="/?city={{ city.name }}" class="city-link">{{ city.name }}</a>
         </div>
       {% endfor %}
     </div>
@@ -32,6 +39,10 @@
   </script>
 
   <style>
+    body {
+        background-image: url({{ url_for('static', filename='backgrounds/' + randomBg) }});
+    }
+
     .city-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -45,6 +56,9 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       transition: transform 0.4s ease-in-out;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .city-item:hover {
@@ -55,6 +69,7 @@
       text-decoration: none;
       color: #0077be;
       font-weight: bold;
+      margin-top: 5px;
     }
 
     .city-link:hover {

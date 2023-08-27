@@ -2,30 +2,90 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Weather App</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Rain Rundown - Search</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script>
+    // Randomly select a background from static/backgrounds
+    document.addEventListener("DOMContentLoaded", function() {
+      const backgrounds = ["bg1.jpg", "bg2.jpg", "bg3.jpg"]; // Add your background filenames here
+      const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+      document.body.style.backgroundImage = `url('{{ url_for('static', filename='backgrounds/' + randomBg) }}')`;
+    });
+  </script>
 </head>
+
+<div class="navbar">
+  <a href="/cities" class="nav-item">🏙️</a>
+  <a href="/home" class="nav-item">🔍</a>
+  <a href="/weather/random" class="nav-item">❓</a>
+</div>
+
 <body>
-  <header>
-    <h1>Weather App</h1>
-  </header>
-  <main>
-    <form id="search-form">
-      <input type="text" id="search-input" placeholder="Enter city name">
-      <button type="submit">Search</button>
-    </form>
-    <div id="weather-info" style="display: none;">
-      <h2 id="city"></h2>
-      <img id="icon" alt="weather icon">
-      <p id="description"></p>
-      <p id="temperature"></p>
-      <p id="feels-like"></p>
-      <p id="humidity"></p>
-      <p id="wind"></p>
-      <p id="sunrise"></p>
-      <p id="sunset"></p>
+  <div class="container">
+    <div class="city-container">
+      <h1 contenteditable="true" onblur="location.href='/?city=' + this.innerText.toLowerCase().replace(/\b\w/g, function(l){ return l.toUpperCase(); })" onkeydown="handleEnterKey(event, this)">Search</h1>
     </div>
-  </main>
-  <script src="weather.js"></script>
+  </div>
+  
+  <script>
+    function handleEnterKey(event, element) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Prevent the default behavior (newline)
+        location.href = '/?city=' + element.innerText.toLowerCase().replace(/\b\w/g, function(l){ return l.toUpperCase(); });
+      }
+    }
+  </script>
+  
+  <div class="weather-info">
+    <div class="weather-item">
+      <div class="weather-label">Temperature:</div>
+      <div class="weather-value-container">
+        <span id="temperature-celsius" class="weather-value">0°C</span>
+        <span id="temperature-fahrenheit" class="weather-value" style="display:none">0°F</span>
+      </div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Description:</div>
+      <div class="weather-value">-</div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Feels Like:</div>
+      <div class="weather-value-container">
+        <span id="feels-like-celsius" class="weather-value">0°C</span>
+        <span id="feels-like-fahrenheit" class="weather-value" style="display:none">0°F</span>
+      </div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Humidity:</div>
+      <div class="weather-value">0%</div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Pressure:</div>
+      <div class="weather-value">0 hPa</div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Wind Speed:</div>
+      <div class="weather-value">0 m/s</div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Cloudiness:</div>
+      <div class="weather-value">0 %</div>
+    </div>
+    <div class="weather-item"> 
+      <div class="weather-label">Sunrise:</div> 
+      <div class="weather-value">-</div>
+    </div>
+    <div class="weather-item">
+      <div class="weather-label">Sunset:</div> 
+      <div class="weather-value">-</div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/weather.js') }}"></script>
 </body>
+<div id="sidebar">
+  <button id="sidebar-button" onclick="showSavedCities()">☰</button>
+  <div id="saved-cities-dropdown" style="display: none;">
+    <!-- Saved cities will be populated here -->
+  </div>
+</div>
 </html>

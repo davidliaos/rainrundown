@@ -70,19 +70,66 @@ def get_weather(city):
         # Return error message if API request was not successful
         return jsonify({"error": "Failed to get weather information."}), 404
 
+import os
 
-# Route to display weather information for a randomly chosen city
-@app.route("/")
-def index():
+@app.route("/home")
+def home():
+    # List all files in the static/backgrounds directory
+    backgrounds_dir = os.path.join(os.getcwd(), "static", "backgrounds")
+    background_files = os.listdir(backgrounds_dir)
+
+    # Randomly select a background image
+    random_bg = random.choice(background_files)
+
     # Check if a city name was specified as a query parameter
     city_name = request.args.get("city")
 
     if city_name:
         # Use the specified city to get weather information
         weather_info = get_weather(city_name).json.get("weather")
-        return render_template("weather.html", city=city_name, weather=weather_info)
+        return render_template("index.html", city=city_name, weather=weather_info, randomBg=random_bg)
     else:
-        return redirect(url_for("get_random_weather"))
+        # If no city is specified, display the index page with placeholders
+        weather_info = {
+            "city": "Search",
+            "country": "",
+            "country_code": "",
+            "temperature_celsius": 0,
+            "temperature_fahrenheit": 0,
+            "feels_like_celsius": 0,
+            "feels_like_fahrenheit": 0,
+            "humidity": 0,
+            "pressure": 0,
+            "wind_speed": 0,
+            "wind_direction": "N/A",
+            "sunrise": "00:00 AM",
+            "sunset": "00:00 PM",
+            "description": "",
+            "icon": "",
+            "cloudiness": 0,
+        }
+        return render_template("index.html", city="Search", weather=weather_info, randomBg=random_bg)
+
+@app.route("/")
+def index():
+    # Check if a city name was specified as a query parameter
+    city_name = request.args.get("city")
+
+    if city_name:
+        try:
+            # Use the specified city to get weather information
+            response = get_weather(city_name)
+            if response.status_code == 200:
+                weather_info = response.json.get("weather")
+                return render_template("weather.html", city=city_name, weather=weather_info)
+            else:
+                # If the response is not successful, redirect to random weather
+                return redirect(url_for("get_random_weather"))
+        except Exception as e:
+            # If any error occurs, redirect to random weather
+            return redirect(url_for("get_random_weather"))
+    else:
+        return redirect(url_for("home"))
 
 
 @app.route("/weather/random")
@@ -109,11 +156,16 @@ def weather():
 def cities():
     total_cities = len(city_data)
     current_count = request.args.get("count", default=5, type=int)
-    return render_template("city.html", cities=city_data, current_count=current_count, total_cities=total_cities)
+    
+    # List all files in the static/backgrounds directory
+    backgrounds_dir = os.path.join(os.getcwd(), "static", "backgrounds")
+    background_files = os.listdir(backgrounds_dir)
+
+    # Randomly select a background image
+    random_bg = random.choice(background_files)
+
+    return render_template("city.html", cities=city_data, current_count=current_count, total_cities=total_cities, randomBg=random_bg)
 
 # Run the server
 if __name__ == "__main__":
     app.run()
-
-
-
