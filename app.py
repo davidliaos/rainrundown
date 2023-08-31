@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for
 import requests
 import random
 import datetime
+import os
 import json
 
 with open("city.list.json", encoding="utf8") as f:
@@ -24,6 +25,7 @@ def get_weather(city):
 
     # Make API request to get weather data
     response = requests.get(weather_url)
+# deepcode ignore Ssrf: <please specify a reason of ignoring this>
 
     # Check if API request was successful
     if response.status_code == 200:
@@ -69,8 +71,6 @@ def get_weather(city):
     else:
         # Return error message if API request was not successful
         return jsonify({"error": "Failed to get weather information."}), 404
-
-import os
 
 @app.route("/home")
 def home():

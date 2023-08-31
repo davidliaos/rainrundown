@@ -4,8 +4,7 @@
 
 body {
   padding-top: 60px;
-  background-image: url('https://cdn.discordapp.com/attachments/1062620512095846493/1082152973406314496/few_clouds.png');
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   font-family: 'Avenir', sans-serif;
 }
@@ -53,6 +52,18 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+#background{
+height: 100vh;
+width: 100vw;
+background: url('/static/backgrounds/mist.png');
+background-repeat: no-repeat;
+background-size: cover;
+position: absolute;
+left: 0;
+top: 0;
+z-index: -2;
 }
 
 .weather-item {

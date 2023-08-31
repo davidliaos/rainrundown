@@ -13,7 +13,9 @@
 </div>
 
 <body>
+ <div id= "background"> </div>
   <div class="container">
+    
     <div class="city-container">
       <img src="http://openweathermap.org/img/wn/{{ weather.icon }}.png" alt="{{ weather.description }}" width="50px">
       <img src="https://flagsapi.com/{{ weather.country_code }}/flat/48.png" alt="Country Flag">
@@ -49,47 +51,70 @@
       <div class="weather-item">
         <div class="weather-label">Temperature:</div>
         <div class="weather-value-container">
-            <span id="temperature-celsius" class="weather-value">{{ weather.temperature_celsius }}°C</span>
-            <span id="temperature-fahrenheit" class="weather-value" style="display:none">{{ weather.temperature_fahrenheit }}°F</span>
+            <span id="temperature-celsius" class="weather-value"></span>
+            <span id="temperature-fahrenheit" class="weather-value" style="display:none"></span>
           </div>
         </div>
         <div class="weather-item">
           <div class="weather-label">Description:</div>
-          <div class="weather-value">{{ weather.description }}</div>
+          <div class="weather-value"></div>
         </div>
         <div class="weather-item">
           <div class="weather-label">Feels Like:</div>
           <div class="weather-value-container">
-            <span id="feels-like-celsius" class="weather-value">{{ weather.feels_like_celsius }}°C</span>
-            <span id="feels-like-fahrenheit" class="weather-value" style="display:none">{{ weather.feels_like_fahrenheit }}°F</span>
+            <span id="feels-like-celsius" class="weather-value"></span>
+            <span id="feels-like-fahrenheit" class="weather-value" style="display:none"></span>
           </div>
         </div>
         <div class="weather-item">
           <div class="weather-label">Humidity:</div>
-          <div class="weather-value">{{ weather.humidity }}%</div>
+          <div class="weather-value"> </div>
         </div>
         <div class="weather-item">
           <div class="weather-label">Pressure:</div>
-          <div class="weather-value">{{ weather.pressure }} hPa</div>
+          <div class="weather-value"> </div>
         </div>
         <div class="weather-item">
-          <div class="weather-label">Wind Speed:</div>
-          <div class="weather-value">{{ weather.wind_speed }} m/s</div>
+          <div class="weather-label">Sunrise:</div>
+          <div class="weather-value"> </div>
         </div>
         <div class="weather-item">
           <div class="weather-label">Cloudiness:</div>
-          <div class="weather-value">{{ weather.cloudiness }} %</div>
+          <div class="weather-value"> </div>
         </div>
         <div class="weather-item"> 
-          <div class="weather-label">Sunrise:</div> 
-          <div class="weather-value">{{ weather.sunrise }}</div>
+          <div class="weather-label">Wind Speed:</div> 
+          <div class="weather-value"></div>
         </div>
         <div class="weather-item">
           <div class="weather-label">Sunset:</div> 
-          <div class="weather-value">{{ weather.sunset }} </div>
+          <div class="weather-value"> </div>
         </div>
       </div>
     </div>
+    <script>
+      const city = "{{ city }}";
+      var weather = "{{ weather_info }}";
+      images = [
+        "{{ url_for('static', filename='backgrounds/default.png') }}",
+        "{{ url_for('static', filename='backgrounds/clear_skies.png') }}",
+        "{{ url_for('static', filename='backgrounds/clear_sky.png') }}",
+        "{{ url_for('static', filename='backgrounds/drizzle_rain.png') }}",
+        "{{ url_for('static', filename='backgrounds/few_clouds.png') }}",
+        "{{ url_for('static', filename='backgrounds/fog.png') }}",
+        "{{ url_for('static', filename='backgrounds/heavy_rain.png') }}",
+        "{{ url_for('static', filename='backgrounds/heavy_shower.png') }}",
+        "{{ url_for('static', filename='backgrounds/light_rain.png') }}",
+        "{{ url_for('static', filename='backgrounds/light_snow.png') }}",
+        "{{ url_for('static', filename='backgrounds/mist.png') }}",
+        "{{ url_for('static', filename='backgrounds/moderate_rain.png') }}",
+        "{{ url_for('static', filename='backgrounds/scattered_clouds.png') }}",
+        "{{ url_for('static', filename='backgrounds/thunderstorm.png') }}",
+        "{{ url_for('static', filename='backgrounds/tornado.png') }}",
+        "{{ url_for('static', filename='backgrounds/volcanic_ash.png') }}",
+      ]
+    </script>
+
     <script src="{{ url_for('static', filename='js/weather.js') }}"></script>
   </body>
   <!-- Add this right before the closing body tag -->

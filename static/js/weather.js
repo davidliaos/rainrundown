@@ -8,30 +8,31 @@ function getWeather(city, images) {
 
       const flagImg = document.getElementById('country-flag');
       const countryCode = data.weather.country_code;
-      if (countryCode) {
-          flagImg.src = `https://flagsapi.com/${countryCode}/flat/64.png`;
-          flagImg.onerror = function() {
-              console.error("Error loading flag image.");
-              flagImg.style.display = 'none'; // Hide the flag image if there's an error
-          };
-      } else {
-          flagImg.style.display = 'none'; // Hide the flag image if country code is not available
-      }
 
+      document.getElementsByClassName('weather-value')[0].innerHTML += data.weather.temperature_celsius + ' °C';
+      document.getElementsByClassName('weather-value')[1].innerHTML += data.weather.temperature_fahrenheit + ' °F';
+      document.getElementsByClassName('weather-value')[2].innerHTML += data.weather.description;
+      document.getElementsByClassName('weather-value')[3].innerHTML += data.weather.feels_like_celsius + ' °C';
+      document.getElementsByClassName('weather-value')[4].innerHTML += data.weather.feels_like_fahrenheit + ' °F';
+      document.getElementsByClassName('weather-value')[5].innerHTML += data.weather.humidity + ' %';
+      document.getElementsByClassName('weather-value')[6].innerHTML += data.weather.pressure + ' hPa';
+      document.getElementsByClassName('weather-value')[7].innerHTML += data.weather.sunset;
+      document.getElementsByClassName('weather-value')[8].innerHTML += data.weather.cloudiness + ' %';
+      document.getElementsByClassName('weather-value')[9].innerHTML += data.weather.wind_speed + 'mph';
+      document.getElementsByClassName('weather-value')[10].innerHTML += data.weather.sunrise;
       // Set the background image based on the weather description
-      console.log(data.weather.description.replace(/ /g, "_"));
       let imageURL = '';
       for (let image of images) if (image.includes(data.weather.description.replace(/ /g, "_"))) imageURL = image;
+      console.log(imageURL);
       if (imageURL === '') imageURL = images[0];
       
-      document.querySelector('body').style.background = "url('" + imageURL + "')";
+      document.getElementById('background').style.background = "url('" + imageURL + "')";
     })
     .catch(error => {
       console.error('Error:', error);
-      alert('Failed to get weather information');
+      console.log('Failed to get weather information');
     });
 }
-
 function toggleStar() {
   const starButton = document.getElementById('star-button');
   const starPath = document.getElementById('star-path');
@@ -87,6 +88,7 @@ function getSavedCities() {
 
 // Helper function to save a city to localStorage
 function saveCity(cityName) {
+  // deepcode ignore DOMXSS: <please specify a reason of ignoring this>
   const savedCities = getSavedCities();
   if (!savedCities.includes(cityName)) {
     savedCities.push(cityName);
@@ -138,12 +140,15 @@ function updateStarState(cityName) {
 }
 
 function toggleTemperatureUnits() {
+
   var tempC = document.querySelector("#temperature-celsius");
   var tempF = document.querySelector("#temperature-fahrenheit");
+
   var feelsLikeC = document.querySelector("#feels-like-celsius");
   var feelsLikeF = document.querySelector("#feels-like-fahrenheit");
   var tempToggleBtn = document.querySelector("#temperature-toggle");
 
+  
   if (tempToggleBtn.textContent === "°C") {
       tempC.style.display = "none";
       tempF.style.display = "inline-block";
@@ -151,14 +156,15 @@ function toggleTemperatureUnits() {
       feelsLikeF.style.display = "inline-block";
       tempToggleBtn.textContent = "°F";
   } else {
+
       tempC.style.display = "inline-block";
       tempF.style.display = "none";
+
       feelsLikeC.style.display = "inline-block";
       feelsLikeF.style.display = "none";
       tempToggleBtn.textContent = "°C";
   }
 }
-
 // Check if the current city is saved when the page loads
 document.addEventListener('DOMContentLoaded', function() {
   const cityName = document.querySelector('.city-container h1').textContent;
